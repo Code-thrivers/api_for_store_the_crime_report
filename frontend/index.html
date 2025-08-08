@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anonymous Reporting</title>
+</head>
+<body>
+  <h1>Report a Crime Anonymously</h1>
+
+  <form id="reportForm">
+    <label for="type">Crime Type:</label><br>
+    <input type="text" id="type" name="type" required><br><br>
+
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" required></textarea><br><br>
+
+    <label for="date">Date:</label><br>
+    <input type="date" id="date" name="date" required><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="responseMsg"></p>
+
+  <!-- Watson Assistant Script Embed -->
+  <script>
+    window.watsonAssistantChatOptions = {
+      integrationID: "358d39ed-c317-4195-8b11-3cfbbe5078c1",
+      region: "eu-de",
+      serviceInstanceID: "9908f28f-f7f7-4587-b5bf-1fb2c37595b2",
+      onLoad: async (instance) => { await instance.render(); }
+    };
+    setTimeout(function(){
+      const t=document.createElement('script');
+      t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + 
+             (window.watsonAssistantChatOptions.clientVersion || 'latest') + 
+             "/WatsonAssistantChatEntry.js";
+      document.head.appendChild(t);
+    });
+  </script>
+
+  <!-- Submit Form via JavaScript -->
+  <script>
+    document.getElementById("reportForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = {
+        type: document.getElementById("type").value,
+        location: document.getElementById("location").value,
+        description: document.getElementById("description").value,
+        date: document.getElementById("date").value,
+      };
+
+      fetch("https://your-backend-url/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById("responseMsg").innerText = result.status === "success"
+          ? "Report submitted successfully."
+          : "Failed to submit report.";
+      })
+      .catch(err => {
+        document.getElementById("responseMsg").innerText = "Error submitting report.";
+        console.error(err);
+      });
+    });
+  </script>
+  <script>
+  window.watsonAssistantChatOptions = {
+    integrationID: "358d39ed-c317-4195-8b11-3cfbbe5078c1", // The ID of this integration.
+    region: "eu-de", // The region your integration is hosted in.
+    serviceInstanceID: "9908f28f-f7f7-4587-b5bf-1fb2c37595b2", // The ID of your service instance.
+    onLoad: async (instance) => { await instance.render(); }
+  };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+applications:
+  - name: anonymous-reporting-backend
+    memory: 256M
+    buildpack: python_buildpack
+    command: python app.py

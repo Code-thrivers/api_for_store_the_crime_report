@@ -1,0 +1,4 @@
+Flask
+cloudant
+python-dotenv
+flask-cors
